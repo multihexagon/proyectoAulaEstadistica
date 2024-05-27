@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/index.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Linear Regression with Flask</title>
+</head>
+<body>
+    <h4>Proyecto de Aula - Estadística</h4>
+    <h1>Simulador de Regresión lineal</h1>
+    <hr>
+    <p>Ingrese los valores para <span style="font-weight: bolder;">X</span> & <span style="font-weight: bolder;">Y</span>, luego presione en <span style="font-style: italic;font-weight: bolder;">añadir datos</span>  para pasar al siguiente set</p>
+    <form action="/add" method="post">
+        <div class="inputs">
+            <label for="x"><h3>X:</h3></label>
+            <input type="text" id="x" name="x" required>
+            <label for="y"><h3>Y:</h3></label>
+            <input type="text" id="y" name="y" required>
+        </div>
+        <button type="submit" class="button">
+            <span class="button__text">Añadir Datos</span>
+            <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+        </button>
+    </form>
+
+    <h2>Data Points</h2>
+    <ul>
+        {% for x, y in zip(data_x, data_y) %}
+            <li>X: {{ x[0] }}, Y: {{ y }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Haz una predicción</h2>
+    <p>Ingrese un valor de <span style="font-weight: bolder;">X</span> para predecir el valor de <span style="font-weight: bolder;">Y</span></p>
+    <form action="/predict" method="post">
+        <label for="x_new">X:</label>
+        <input type="text" id="x_new" name="x_new" required>
+        <button type="submit" class="button">
+            <span class="button__text">Predecir</span>
+            <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+        </button>
+    </form>
+
+    {% if prediction is not none %}
+        <h3>Prediction for X: {{ x_new }} is Y: {{ prediction }}</h3>
+        <img src="data:image/png;base64,{{ graph_url }}" alt="Regression Graph">
+    {% endif %}
+</body>
+</html>
